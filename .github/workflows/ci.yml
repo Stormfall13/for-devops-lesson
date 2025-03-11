@@ -34,27 +34,3 @@ jobs:
 
       - name: Build App
         run: npm run build  # Проверяем, что проект билдится
-
-  deploy:
-    name: Deploy to Vercel
-    needs: test  # Выполняется только если тесты пройдены
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build App
-        run: npm run build
-
-      - name: Deploy to Vercel
-        run: npm run deploy
