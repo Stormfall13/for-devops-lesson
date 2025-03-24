@@ -1,4 +1,4 @@
-name: React App CI
+name: React App CI + Cypress E2E
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,5 +25,18 @@ jobs:
     - name: 🛠️ Собрать проект
       run: npm run build
 
-    - name: ✅ Прогнать тесты
-      run: npm test -- --watchAll=false
+    - name: 🚀 Запустить dev-сервер
+      run: npm start &
+      env:
+        CI: false
+
+    - name: 🕒 Ожидание запуска сервера
+      run: npx wait-on http://localhost:3000
+
+    - name: 🧪 Запуск Cypress E2E тестов
+      uses: cypress-io/github-action@v6
+      with:
+        start: npm start
+        wait-on: 'http://localhost:3000'
+        wait-on-timeout: 60
+        browser: chrome
